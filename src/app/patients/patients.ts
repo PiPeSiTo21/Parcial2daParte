@@ -43,10 +43,9 @@ export class PatientsComponent implements OnInit {
     this.listaPacientes = this.pacienteService.obtenerTodos();
   }
 
-  // Sanitización en tiempo real: Solo permite letras (incluye tildes, ñ/Ñ y espacios)
   validarSoloLetras(campo: 'nombres' | 'apellidos', event: Event): void {
     const input = event.target as HTMLInputElement;
-    const valorLimpio = input.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+    const valorLimpio = input.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '').slice(0, 50);
     input.value = valorLimpio;
 
     if (campo === 'nombres') this.nombres.set(valorLimpio);
@@ -54,10 +53,10 @@ export class PatientsComponent implements OnInit {
     this.limpiarError(campo);
   }
 
-  // Sanitización en tiempo real: Solo permite dígitos numéricos (0-9)
   validarSoloNumeros(campo: 'numeroDocumento' | 'telefono', event: Event): void {
     const input = event.target as HTMLInputElement;
-    const valorLimpio = input.value.replace(/[^0-9]/g, '');
+    const max = campo === 'numeroDocumento' ? 15 : 12;
+    const valorLimpio = input.value.replace(/[^0-9]/g, '').slice(0, max);
     input.value = valorLimpio;
 
     if (campo === 'numeroDocumento') this.numeroDocumento.set(valorLimpio);

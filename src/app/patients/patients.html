@@ -46,6 +46,7 @@
                                 <input 
                                     type="text" 
                                     class="form-control" 
+                                    maxlength="15"
                                     [class.is-invalid]="errores()['numeroDocumento']"
                                     [ngModel]="numeroDocumento()" 
                                     (ngModelChange)="numeroDocumento.set($event)" 
@@ -65,6 +66,7 @@
                             <input 
                                 type="text" 
                                 class="form-control" 
+                                maxlength="50"
                                 [class.is-invalid]="errores()['nombres']"
                                 [ngModel]="nombres()" 
                                 (ngModelChange)="nombres.set($event)" 
@@ -83,6 +85,7 @@
                             <input 
                                 type="text" 
                                 class="form-control" 
+                                maxlength="50"
                                 [class.is-invalid]="errores()['apellidos']"
                                 [ngModel]="apellidos()" 
                                 (ngModelChange)="apellidos.set($event)" 
@@ -122,6 +125,7 @@
                                 <input 
                                     type="text" 
                                     class="form-control" 
+                                    maxlength="12"
                                     [class.is-invalid]="errores()['telefono']"
                                     [ngModel]="telefono()" 
                                     (ngModelChange)="telefono.set($event)" 
