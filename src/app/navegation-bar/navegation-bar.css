@@ -1,0 +1,14 @@
+.navbar {
+  background-color: #0b3c5d !important;
+  z-index: 1030;
+}
+
+.nav-link {
+  color: rgba(255, 255, 255, 0.85) !important;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.nav-link:hover {
+  color: #ffdd57 !important;
+  transform: translateY(-1px);
+}

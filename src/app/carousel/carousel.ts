@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 
 @Component({
-  imports: [],
   selector: 'app-carousel',
-  styleUrl: './carousel.css',
-  templateUrl: './carousel.html',
+  imports: [],
+  templateUrl: './carousel.html', 
+  styleUrl: './carousel.css'     
 })
-export class Carousel {}
+export class CarouselComponent { }

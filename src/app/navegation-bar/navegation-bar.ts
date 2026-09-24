@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 
 @Component({
-  imports: [],
   selector: 'app-navegation-bar',
-  styleUrl: './navegation-bar.css',
+  standalone: true,
+  imports: [],
   templateUrl: './navegation-bar.html',
+  styleUrl: './navegation-bar.css'
 })
-export class NavegationBar {}
+export class NavegationBarComponent {}

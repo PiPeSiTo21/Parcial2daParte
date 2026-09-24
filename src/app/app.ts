@@ -1,10 +1,23 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { HeaderComponent } from './header/header'; 
+import { NavegationBarComponent } from './navegation-bar/navegation-bar'; 
+import { CarouselComponent } from './carousel/carousel';
+import { DoctorsComponent } from './doctors/doctors'; 
+import { PatientsComponent } from './patients/patients'; 
+import { FooterComponent } from './footer/footer';
 
 @Component({
-  imports: [RouterOutlet],
   selector: 'app-root',
-  styleUrl: './app.css',
+  standalone: true,
+  imports: [
+    HeaderComponent, 
+    NavegationBarComponent,
+    CarouselComponent, 
+    DoctorsComponent, 
+    PatientsComponent, 
+    FooterComponent
+  ],
+  styleUrl: './app.css',   
   templateUrl: './app.html',
 })
 export class App {

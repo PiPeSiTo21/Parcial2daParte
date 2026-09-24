@@ -1,1 +1,220 @@
-<p>doctors works!</p>
+<section class="container mb-5 mt-5" id="seccionEspecialidades">
+    <div class="row">
+        <aside class="col-12 col-md-4 mb-4">
+            <h2>Especialidades</h2>
+            <div class="list-group" id="listaEspecialidades">
+                @for (esp of especialidades; track esp.id) {
+                    <button 
+                        type="button" 
+                        class="list-group-item list-group-item-action text-start"
+                        [class.active]="especialidadSeleccionada()?.id === esp.id"
+                        (click)="seleccionarEspecialidad(esp)">
+                        {{ esp.nombre }}
+                    </button>
+                }
+            </div>
+            <div class="mt-3 p-3 border rounded bg-light">
+                <p id="descripcionEspecialidad" class="mb-0 text-muted">
+                    {{ especialidadSeleccionada() ? especialidadSeleccionada()?.descripcion : 'Mostrando todos los médicos disponibles. Haz clic en una especialidad para ver su descripción y filtrar los médicos.' }}
+                </p>
+            </div>
+        </aside>
+
+        <main class="col-12 col-md-8" id="seccionMedicos">
+            <h2>Nuestros Médicos</h2>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3" id="contenedorTarjetasMedicos">
+                
+                @for (medico of medicosFiltrados(); track medico.id) {
+                    <div class="col tarjeta-medico-item">
+                        <div class="card h-100 shadow-sm border-0 rounded-3">
+                            <img [src]="medico.imagen" class="card-img-top doctor-img rounded-top-3" [alt]="medico.nombre">
+                            <div class="card-body d-flex flex-column p-3">
+                                <h6 class="card-title fw-bold mb-1">{{ medico.nombre }}</h6>
+                                <p class="card-text text-primary small mb-1">{{ medico.especialidad }}</p>
+                                <p class="card-text small text-muted flex-grow-1"><i class="far fa-clock me-1"></i>{{ medico.horario }}</p>
+                                <button 
+                                    type="button" 
+                                    class="btn btn-primary btn-sm rounded-pill mt-2 fw-semibold"
+                                    (click)="agendarCita(medico)">
+                                    <i class="fas fa-calendar-plus me-1"></i> Agendar Cita
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                } @empty {
+                    <div class="col-12 w-100 text-center py-4 text-muted">
+                        <i class="fas fa-user-md fa-2x mb-2 d-block"></i>
+                        No hay médicos disponibles para esta especialidad en este momento.
+                    </div>
+                }
+
+            </div>
+        </main>
+    </div>
+</section>
+
+@if (isModalOpen()) {
+    <div class="modal-backdrop-custom" (click)="cerrarModal()">
+        <div class="modal-dialog m-0 modal-content-animated shadow-lg rounded-4 overflow-hidden" (click)="$event.stopPropagation()">
+            <div class="modal-content border-0">
+                
+                <div class="modal-header bg-primary text-white px-4 py-3 border-0">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="fas fa-calendar-check fa-lg"></i>
+                        <h5 class="modal-title fw-bold m-0">
+                            {{ citaConfirmada() ? '¡Cita Confirmada!' : 'Agendar Cita Rápida' }}
+                        </h5>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" (click)="cerrarModal()" aria-label="Cerrar"></button>
+                </div>
+
+                <div class="modal-body p-4 bg-white">
+
+                    @if (!citaConfirmada()) {
+                        <form (submit)="confirmarCita($event)">
+
+                            <div class="d-flex align-items-center gap-3 p-3 mb-3 rounded-3 bg-light border-start border-primary border-4 shadow-sm">
+                                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px;">
+                                    <i class="fas fa-user-md fa-lg"></i>
+                                </div>
+                                <div class="lh-sm">
+                                    <span class="text-uppercase text-muted fw-bold d-block mb-1" style="font-size: 0.68rem; letter-spacing: 0.5px;">Médico Seleccionado</span>
+                                    <div class="fw-bold text-dark fs-6">{{ medicoSeleccionado()?.nombre }}</div>
+                                    <span class="badge bg-primary-subtle text-primary fw-semibold mt-1">{{ medicoSeleccionado()?.especialidad }}</span>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold text-secondary small mb-1">Seleccionar Paciente *</label>
+                                <div class="input-group custom-input-group">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    <select 
+                                        class="form-select" 
+                                        [class.is-invalid]="erroresFormulario().paciente"
+                                        [ngModel]="pacienteSeleccionado()" 
+                                        (ngModelChange)="pacienteSeleccionado.set($event); limpiarError('paciente')" 
+                                        name="paciente">
+                                        <option value="">Seleccione un paciente...</option>
+                                        @for (paciente of listaPacientes(); track paciente.id) {
+                                            <option [value]="paciente.id">
+                                                {{ paciente.nombres }} {{ paciente.apellidos }} — {{ paciente.tipoDocumento }} {{ paciente.numeroDocumento }}
+                                            </option>
+                                        }
+                                    </select>
+                                </div>
+                                @if (erroresFormulario().paciente) {
+                                    <div class="text-danger small mt-1">
+                                        <i class="fas fa-exclamation-circle me-1"></i>{{ erroresFormulario().paciente }}
+                                    </div>
+                                }
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold text-secondary small mb-1">Fecha de la Cita *</label>
+                                <div class="input-group custom-input-group">
+                                    <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                                    <input 
+                                        type="date" 
+                                        class="form-control" 
+                                        [class.is-invalid]="erroresFormulario().fecha"
+                                        [min]="fechaHoy"
+                                        [ngModel]="fechaCita()" 
+                                        (ngModelChange)="fechaCita.set($event); limpiarError('fecha')" 
+                                        name="fecha">
+                                </div>
+                                @if (erroresFormulario().fecha) {
+                                    <div class="text-danger small mt-1">
+                                        <i class="fas fa-exclamation-circle me-1"></i>{{ erroresFormulario().fecha }}
+                                    </div>
+                                }
+                            </div>
+
+                            <div class="row g-3 mb-4">
+                                <div class="col-6">
+                                    <label class="form-label fw-semibold text-secondary small mb-1">Hora Inicio *</label>
+                                    <div class="input-group custom-input-group">
+                                        <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                                        <input 
+                                            type="time" 
+                                            class="form-control" 
+                                            [class.is-invalid]="erroresFormulario().horaInicio"
+                                            [ngModel]="horaInicio()" 
+                                            (ngModelChange)="horaInicio.set($event); limpiarError('horaInicio')" 
+                                            name="horaInicio">
+                                    </div>
+                                    @if (erroresFormulario().horaInicio) {
+                                        <div class="text-danger small mt-1">
+                                            <i class="fas fa-exclamation-circle me-1"></i>{{ erroresFormulario().horaInicio }}
+                                        </div>
+                                    }
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label fw-semibold text-secondary small mb-1">Hora Fin *</label>
+                                    <div class="input-group custom-input-group">
+                                        <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                                        <input 
+                                            type="time" 
+                                            class="form-control" 
+                                            [class.is-invalid]="erroresFormulario().horaFin"
+                                            [ngModel]="horaFin()" 
+                                            (ngModelChange)="horaFin.set($event); limpiarError('horaFin')" 
+                                            name="horaFin">
+                                    </div>
+                                    @if (erroresFormulario().horaFin) {
+                                        <div class="text-danger small mt-1">
+                                            <i class="fas fa-exclamation-circle me-1"></i>{{ erroresFormulario().horaFin }}
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="d-flex gap-2 pt-2 border-top">
+                                <button type="button" class="btn btn-light text-secondary border w-50 fw-semibold rounded-3 py-2" (click)="cerrarModal()">
+                                    Cancelar
+                                </button>
+                                <button type="submit" class="btn btn-success w-50 fw-semibold rounded-3 py-2 shadow-sm">
+                                    <i class="fas fa-check-circle me-1"></i> Confirmar Cita
+                                </button>
+                            </div>
+                        </form>
+                    }
+
+                    @if (citaConfirmada()) {
+                        <div class="text-center py-3">
+                            <div class="success-icon-wrapper mb-3 mx-auto">
+                                <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+                            </div>
+                            <h4 class="fw-bold text-dark mb-1">¡Cita Agendada con Éxito!</h4>
+                            <p class="text-muted small mb-4">La cita médica ha sido registrada correctamente en el sistema.</p>
+
+                            <div class="bg-light rounded-3 p-3 text-start mb-4 border">
+                                <div class="d-flex justify-content-between mb-2 pb-2 border-bottom">
+                                    <span class="text-muted small">Médico:</span>
+                                    <span class="fw-bold text-dark small">{{ medicoSeleccionado()?.nombre }}</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2 pb-2 border-bottom">
+                                    <span class="text-muted small">Paciente:</span>
+                                    <span class="fw-bold text-dark small">{{ obtenerNombrePaciente() }}</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2 pb-2 border-bottom">
+                                    <span class="text-muted small">Fecha:</span>
+                                    <span class="fw-bold text-dark small">{{ fechaCita() }}</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span class="text-muted small">Horario:</span>
+                                    <span class="fw-bold text-primary small">{{ horaInicio() }} - {{ horaFin() }}</span>
+                                </div>
+                            </div>
+
+                            <button type="button" class="btn btn-primary w-100 fw-semibold py-2 rounded-3 shadow-sm" (click)="cerrarModal()">
+                                Entendido
+                            </button>
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+}

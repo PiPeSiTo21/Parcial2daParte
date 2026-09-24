@@ -1,1 +1,39 @@
-<p>carousel works!</p>
+<section class="container mb-5" id="seccionPromociones">
+    <h2 class="mb-3">Promociones y Servicios</h2>
+    <div id="carouselPromociones" class="carousel slide rounded overflow-hidden shadow-sm" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselPromociones" data-bs-slide-to="0" class="active"></button>
+            <button type="button" data-bs-target="#carouselPromociones" data-bs-slide-to="1"></button>
+            <button type="button" data-bs-target="#carouselPromociones" data-bs-slide-to="2"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="resourceImages/slide1.jpg" class="d-block w-100" alt="Chequeo Preventivo">
+                <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 p-2 rounded">
+                    <h5>Chequeo Médico General</h5>
+                    <p>Aprovecha un 30% de descuento en tu consulta de valoración inicial.</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="resourceImages/slide2.jpeg" class="d-block w-100" alt="Jornada de Vacunación">
+                <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 p-2 rounded">
+                    <h5>Jornada Especial de Salud</h5>
+                    <p>Atención prioritaria y valoraciones especializadas durante esta semana.</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="resourceImages/slide3.jpg" class="d-block w-100" alt="Especialidades">
+                <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 p-2 rounded">
+                    <h5>Unidad de Especialistas</h5>
+                    <p>Contamos con profesionales altamente calificados en más de 10 áreas.</p>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselPromociones" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselPromociones" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
+    </div>
+</section>

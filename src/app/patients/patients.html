@@ -1,0 +1,208 @@
+<section class="container my-5" id="pacientes">
+    <div class="row g-4">
+        
+        <div class="col-12 col-lg-5">
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-header bg-primary text-white py-3">
+                    <h5 class="card-title m-0 fw-bold">
+                        <i class="fas fa-user-plus me-2"></i>Registrar Nuevo Paciente
+                    </h5>
+                </div>
+                <div class="card-body p-4 bg-white">
+
+                    @if (mensajeExito()) {
+                        <div class="alert alert-success d-flex align-items-center mb-3" role="alert">
+                            <i class="fas fa-check-circle me-2 fs-5"></i>
+                            <div>{{ mensajeExito() }}</div>
+                        </div>
+                    }
+
+                    <form (submit)="guardarPaciente($event)" novalidate>
+                        
+                        <div class="row g-2 mb-3">
+                            <div class="col-12 col-md-5">
+                                <label class="form-label fw-semibold text-secondary small mb-1">Tipo Doc. *</label>
+                                <select 
+                                    class="form-select" 
+                                    [class.is-invalid]="errores()['tipoDocumento']"
+                                    [ngModel]="tipoDocumento()" 
+                                    (ngModelChange)="tipoDocumento.set($event); limpiarError('tipoDocumento')" 
+                                    name="tipoDocumento">
+                                    <option value="">Seleccione...</option>
+                                    <option value="CC">C.C.</option>
+                                    <option value="TI">T.I.</option>
+                                    <option value="CE">C.E.</option>
+                                    <option value="PAS">Pasaporte</option>
+                                </select>
+                                @if (errores()['tipoDocumento']) {
+                                    <div class="text-danger small mt-1">
+                                        <i class="fas fa-exclamation-circle me-1"></i>{{ errores()['tipoDocumento'] }}
+                                    </div>
+                                }
+                            </div>
+
+                            <div class="col-12 col-md-7">
+                                <label class="form-label fw-semibold text-secondary small mb-1">Número Documento *</label>
+                                <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    [class.is-invalid]="errores()['numeroDocumento']"
+                                    [ngModel]="numeroDocumento()" 
+                                    (ngModelChange)="numeroDocumento.set($event)" 
+                                    (input)="validarSoloNumeros('numeroDocumento', $event)"
+                                    name="numeroDocumento" 
+                                    placeholder="Ej: 100234567">
+                                @if (errores()['numeroDocumento']) {
+                                    <div class="text-danger small mt-1">
+                                        <i class="fas fa-exclamation-circle me-1"></i>{{ errores()['numeroDocumento'] }}
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-secondary small mb-1">Nombres *</label>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                [class.is-invalid]="errores()['nombres']"
+                                [ngModel]="nombres()" 
+                                (ngModelChange)="nombres.set($event)" 
+                                (input)="validarSoloLetras('nombres', $event)"
+                                name="nombres" 
+                                placeholder="Ej: Carlos">
+                            @if (errores()['nombres']) {
+                                <div class="text-danger small mt-1">
+                                    <i class="fas fa-exclamation-circle me-1"></i>{{ errores()['nombres'] }}
+                                </div>
+                            }
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-secondary small mb-1">Apellidos *</label>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                [class.is-invalid]="errores()['apellidos']"
+                                [ngModel]="apellidos()" 
+                                (ngModelChange)="apellidos.set($event)" 
+                                (input)="validarSoloLetras('apellidos', $event)"
+                                name="apellidos" 
+                                placeholder="Ej: Ruiz">
+                            @if (errores()['apellidos']) {
+                                <div class="text-danger small mt-1">
+                                    <i class="fas fa-exclamation-circle me-1"></i>{{ errores()['apellidos'] }}
+                                </div>
+                            }
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-secondary small mb-1">Sexo *</label>
+                            <select 
+                                class="form-select" 
+                                [class.is-invalid]="errores()['sexo']"
+                                [ngModel]="sexo()" 
+                                (ngModelChange)="sexo.set($event); limpiarError('sexo')" 
+                                name="sexo">
+                                <option value="">Seleccione...</option>
+                                <option value="Masculino">Masculino</option>
+                                <option value="Femenino">Femenino</option>
+                                <option value="Otro">Otro</option>
+                            </select>
+                            @if (errores()['sexo']) {
+                                <div class="text-danger small mt-1">
+                                    <i class="fas fa-exclamation-circle me-1"></i>{{ errores()['sexo'] }}
+                                </div>
+                            }
+                        </div>
+
+                        <div class="row g-2 mb-4">
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold text-secondary small mb-1">Teléfono *</label>
+                                <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    [class.is-invalid]="errores()['telefono']"
+                                    [ngModel]="telefono()" 
+                                    (ngModelChange)="telefono.set($event)" 
+                                    (input)="validarSoloNumeros('telefono', $event)"
+                                    name="telefono" 
+                                    placeholder="Ej: 3101234567">
+                                @if (errores()['telefono']) {
+                                    <div class="text-danger small mt-1">
+                                        <i class="fas fa-exclamation-circle me-1"></i>{{ errores()['telefono'] }}
+                                    </div>
+                                }
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold text-secondary small mb-1">Fecha Nacimiento *</label>
+                                <input 
+                                    type="date" 
+                                    class="form-control" 
+                                    [max]="fechaHoy"
+                                    [class.is-invalid]="errores()['fechaNacimiento']"
+                                    [ngModel]="fechaNacimiento()" 
+                                    (ngModelChange)="fechaNacimiento.set($event); limpiarError('fechaNacimiento')" 
+                                    name="fechaNacimiento">
+                                @if (errores()['fechaNacimiento']) {
+                                    <div class="text-danger small mt-1">
+                                        <i class="fas fa-exclamation-circle me-1"></i>{{ errores()['fechaNacimiento'] }}
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-success w-100 fw-semibold py-2 rounded-3 shadow-sm">
+                            <i class="fas fa-save me-1"></i> Guardar Paciente
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-7">
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-header bg-secondary text-white py-3">
+                    <h5 class="card-title m-0 fw-bold">
+                        <i class="fas fa-users me-2"></i>Pacientes Registrados
+                    </h5>
+                </div>
+                <div class="card-body p-0 table-responsive bg-white">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>#</th>
+                                <th>Documento</th>
+                                <th>Nombre Completo</th>
+                                <th>Sexo</th>
+                                <th>Teléfono</th>
+                                <th>F. Nacimiento</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (p of listaPacientes; track p.id) {
+                                <tr>
+                                    <td class="fw-bold">{{ p.id }}</td>
+                                    <td><span class="badge bg-light text-dark border">{{ p.tipoDocumento }} {{ p.numeroDocumento }}</span></td>
+                                    <td>{{ p.nombres }} {{ p.apellidos }}</td>
+                                    <td>{{ p.sexo }}</td>
+                                    <td>{{ p.telefono }}</td>
+                                    <td>{{ p.fechaNacimiento }}</td>
+                                </tr>
+                            } @empty {
+                                <tr>
+                                    <td colspan="6" class="text-center py-4 text-muted">
+                                        <i class="fas fa-info-circle me-2"></i>No hay pacientes registrados aún.
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
